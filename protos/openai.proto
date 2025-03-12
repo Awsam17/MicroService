@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package openai;
+
+service OpenaiService {
+    rpc send (Request) returns (Response) ;
+}
+
+message Message {
+  string role = 1;
+  string content = 2;
+}
+
+message CompanyData {
+  string product = 1;
+  string brand = 2;
+  string model = 3;
+  string price = 4;
+  string year = 5;
+  string kilometers = 6;
+}
+
+message Request {
+  repeated Message msg_hist = 1;
+  repeated string ideal = 2;
+  repeated string agent_output = 3;
+  repeated CompanyData company_data = 4;
+}
+
+message Response {
+    string response = 1;
+}
