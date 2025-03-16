@@ -29,6 +29,7 @@
     "axios": "^1.8.2",
     "dotenv": "^16.4.7",
     "langchain": "^0.3.19",
+    "langsmith": "^0.3.14",
     "openai": "^4.87.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"

@@ -1,22 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { Request, Response } from './openai.interface';
 import * as dotenv from 'dotenv';
-import { ChatOpenAI } from '@langchain/openai';
+import { OpenAI } from "openai";
+import { wrapOpenAI } from "langsmith/wrappers";
 
 dotenv.config();
 
+
 @Injectable()
 export class OpenaiService {
-    private model: ChatOpenAI;
+    private openai: OpenAI;
 
     constructor() {
-        this.model = new ChatOpenAI({
-            openAIApiKey : process.env.OPENAI_API_KEY,
-            modelName : 'gpt-4o-mini',
-            temperature : 0 // to avoid randomness .
-        });
+        this.openai = wrapOpenAI(new OpenAI({
+            apiKey : process.env.OPENAI_API_KEY
+        }));
+    
     }
 
+    
     async sendMessage(data: Request): Promise<Response> {
         try {
 
@@ -63,9 +65,12 @@ export class OpenaiService {
                 
             `
 
-            const response = await this.model.invoke(prompt);
+            const response = await this.openai.chat.completions.create({
+                model : "gpt-4o-mini",
+                messages : [{role : "user",content : prompt}],
+            });
 
-            const content = response.content as string;
+            const content = response.choices[0].message.content || "" ;
 
             return { response: content };
         } catch (error) {
