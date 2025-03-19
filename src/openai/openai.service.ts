@@ -30,6 +30,8 @@ export class OpenaiService {
                 a user questions by comparing the response of the agent to the expert (ideal) response for each question from the user .
                 You're given the history messages between that are between the user and the agent, also the company data is used by this agent .
 
+                You should compare between each answer from the agent to the ideal answer for each question from the user in the Message History .
+
                 Compare based on the given criterias between triple dashes . 
 
                 ---
@@ -68,6 +70,7 @@ export class OpenaiService {
             const response = await this.openai.chat.completions.create({
                 model : "gpt-4o-mini",
                 messages : [{role : "user",content : prompt}],
+                temperature : 0
             });
 
             const content = response.choices[0].message.content || "" ;
